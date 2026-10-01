@@ -1,0 +1,90 @@
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Detalle de la Pieza o Repuesto</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 35%;" class="bg-light">Código Interno:</th>
+                                    <td class="fw-bold">{{pieza.codigo}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Nombre:</th>
+                                    <td>{{pieza.nombre}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Descripción:</th>
+                                    <td>{{#if pieza.descripcion}}{{pieza.descripcion}}{{else}}<span class="text-muted">Sin descripción</span>{{/if}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Categoría:</th>
+                                    <td>{{pieza.categoria}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Stock Actual:</th>
+                                    <td class="fw-bold fs-5">{{pieza.stockActual}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Stock Mínimo:</th>
+                                    <td>{{pieza.stockMinimo}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Costo Unitario:</th>
+                                    <td>RD$ {{formatMoney pieza.costoUnitario}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Precio de Venta:</th>
+                                    <td class="text-success fw-bold">RD$ {{formatMoney pieza.precioVenta}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Nivel de Inventario:</th>
+                                    <td>
+                                        {{#if pieza.bajoInventario}}
+                                            <span class="badge bg-danger fs-6">Bajo Inventario</span>
+                                        {{else}}
+                                            <span class="badge bg-success fs-6">Normal</span>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Estado:</th>
+                                    <td>
+                                        {{#if (eq pieza.estado 'Activa')}}
+                                            <span class="badge bg-primary">Activa</span>
+                                        {{else}}
+                                            <span class="badge bg-secondary">Inactiva</span>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Usos en Órdenes:</th>
+                                    <td class="fw-bold">{{pieza.usosEnOrdenes}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="col-md-4 text-center">
+                        <h6 class="text-muted mb-3">Imagen de la Pieza</h6>
+                        {{#if pieza.imagen}}
+                            <img src="{{pieza.imagen}}" alt="Imagen de {{pieza.nombre}}" class="img-fluid img-thumbnail rounded shadow-sm" style="max-height: 250px; object-fit: cover;">
+                        {{else}}
+                            <div class="bg-light border rounded d-flex align-items-center justify-content-center p-4 text-muted" style="height: 250px;">
+                                <span>No se ha cargado ninguna imagen.</span>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <a href="/piezas" class="btn btn-secondary">Volver al listado</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

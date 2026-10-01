@@ -1,0 +1,107 @@
+{{#if mensajeError}}
+    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>
+            <strong>¡Acción bloqueada!</strong> {{mensajeError}}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/if}}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Gestión de Vehículos</h2>
+        <p class="text-muted">Administración de vehículos registrados en el taller.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/vehiculos/crear" class="btn btn-primary">Registrar nuevo vehículo</a>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body bg-light">
+        <form action="/vehiculos" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="placa" class="form-label fw-bold">Buscar por Placa</label>
+                <input type="text" class="form-control" id="placa" name="placa" value="{{filtros.placa}}" placeholder="Ej. A123456">
+            </div>
+            <div class="col-md-3">
+                <label for="marcaId" class="form-label fw-bold">Marca</label>
+                <select class="form-select" id="marcaId" name="marcaId">
+                    <option value="">Todas las marcas</option>
+                    {{#each marcas}}
+                        <option value="{{this.id}}" {{#if (eq ../filtros.marcaId (toString this.id))}}selected{{/if}}>{{this.nombre}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="estado" class="form-label fw-bold">Estado</label>
+                <select class="form-select" id="estado" name="estado">
+                    <option value="">Todos los estados</option>
+                    <option value="Registrado" {{#if (eq filtros.estado 'Registrado')}}selected{{/if}}>Registrado</option>
+                    <option value="En taller" {{#if (eq filtros.estado 'En taller')}}selected{{/if}}>En taller</option>
+                    <option value="Fuera del taller" {{#if (eq filtros.estado 'Fuera del taller')}}selected{{/if}}>Fuera del taller</option>
+                    <option value="Inactivo" {{#if (eq filtros.estado 'Inactivo')}}selected{{/if}}>Inactivo</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-secondary w-100 mb-2">Filtrar</button>
+                <a href="/vehiculos" class="btn btn-outline-secondary w-100">Limpiar Filtros</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{#if vehiculos}}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Año</th>
+                        <th>Color</th>
+                        <th>Tipo</th>
+                        <th>Propietario</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each vehiculos}}
+                    <tr>
+                        <td class="fw-bold fs-5">{{placa}}</td>
+                        <td>{{marca.nombre}}</td>
+                        <td>{{modelo}}</td>
+                        <td>{{anio}}</td>
+                        <td>{{color}}</td>
+                        <td>{{tipoVehiculo}}</td>
+                        <td>{{propietarioNombre}}</td>
+                        <td>
+                            {{#if (eq estado 'Registrado')}}<span class="badge bg-primary">Registrado</span>{{/if}}
+                            {{#if (eq estado 'En taller')}}<span class="badge bg-warning text-dark">En taller</span>{{/if}}
+                            {{#if (eq estado 'Fuera del taller')}}<span class="badge bg-success">Fuera del taller</span>{{/if}}
+                            {{#if (eq estado 'Inactivo')}}<span class="badge bg-secondary">Inactivo</span>{{/if}}
+                        </td>
+                        <td class="text-center">
+                            <a href="/vehiculos/detalle/{{id}}" class="btn btn-sm btn-info" title="Ver detalle">Detalle</a>
+                            <a href="/vehiculos/editar/{{id}}" class="btn btn-sm btn-warning" title="Editar">Editar</a>
+                            <form action="/vehiculos/eliminar/{{id}}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar este vehículo?');" title="Eliminar">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="alert alert-info shadow-sm" role="alert">
+    <h4 class="alert-heading">No se encontraron vehículos</h4>
+    <p>No existen registros que coincidan con los criterios de búsqueda. Haga clic en "Registrar nuevo vehículo" para comenzar.</p>
+</div>
+{{/if}}

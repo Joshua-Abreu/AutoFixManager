@@ -1,0 +1,120 @@
+{{#if mensajeError}}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>¡Acción bloqueada!</strong> {{mensajeError}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+{{/if}}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Gestión de Piezas y Repuestos</h2>
+        <p class="text-muted">Administración del inventario del taller mecánico.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/piezas/crear" class="btn btn-primary">Registrar nueva pieza</a>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body bg-light">
+        <form action="/piezas" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="categoria" class="form-label fw-bold">Categoría</label>
+                <select class="form-select" id="categoria" name="categoria">
+                    <option value="">Todas las categorías</option>
+                    <option value="Motor" {{#if (eq filtros.categoria 'Motor')}}selected{{/if}}>Motor</option>
+                    <option value="Frenos" {{#if (eq filtros.categoria 'Frenos')}}selected{{/if}}>Frenos</option>
+                    <option value="Suspensión" {{#if (eq filtros.categoria 'Suspensión')}}selected{{/if}}>Suspensión</option>
+                    <option value="Transmisión" {{#if (eq filtros.categoria 'Transmisión')}}selected{{/if}}>Transmisión</option>
+                    <option value="Electricidad" {{#if (eq filtros.categoria 'Electricidad')}}selected{{/if}}>Electricidad</option>
+                    <option value="Filtros" {{#if (eq filtros.categoria 'Filtros')}}selected{{/if}}>Filtros</option>
+                    <option value="Aceites y fluidos" {{#if (eq filtros.categoria 'Aceites y fluidos')}}selected{{/if}}>Aceites y fluidos</option>
+                    <option value="Neumáticos" {{#if (eq filtros.categoria 'Neumáticos')}}selected{{/if}}>Neumáticos</option>
+                    <option value="Accesorios" {{#if (eq filtros.categoria 'Accesorios')}}selected{{/if}}>Accesorios</option>
+                    <option value="Otro" {{#if (eq filtros.categoria 'Otro')}}selected{{/if}}>Otro</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="nivelInventario" class="form-label fw-bold">Nivel de Inventario</label>
+                <select class="form-select" id="nivelInventario" name="nivelInventario">
+                    <option value="">Todos los niveles</option>
+                    <option value="Normal" {{#if (eq filtros.nivelInventario 'Normal')}}selected{{/if}}>Normal</option>
+                    <option value="Bajo" {{#if (eq filtros.nivelInventario 'Bajo')}}selected{{/if}}>Bajo Inventario</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="estado" class="form-label fw-bold">Estado</label>
+                <select class="form-select" id="estado" name="estado">
+                    <option value="">Todos los estados</option>
+                    <option value="Activa" {{#if (eq filtros.estado 'Activa')}}selected{{/if}}>Activa</option>
+                    <option value="Inactiva" {{#if (eq filtros.estado 'Inactiva')}}selected{{/if}}>Inactiva</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-secondary w-100 mb-2">Filtrar</button>
+                <a href="/piezas" class="btn btn-outline-secondary w-100">Limpiar Filtros</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{#if piezas}}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th class="text-center">Stock Actual</th>
+                        <th class="text-center">Min.</th>
+                        <th>Precio Venta</th>
+                        <th>Nivel</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each piezas}}
+                    <tr class="{{#if bajoInventario}}table-danger{{/if}}">
+                        <td class="fw-bold">{{codigo}}</td>
+                        <td>{{nombre}}</td>
+                        <td>{{categoria}}</td>
+                        <td class="text-center fw-bold fs-5">{{stockActual}}</td>
+                        <td class="text-center text-muted">{{stockMinimo}}</td>
+                        <td>RD$ {{formatMoney precioVenta}}</td>
+                        <td>
+                            {{#if bajoInventario}}
+                                <span class="badge bg-danger">Bajo Inventario</span>
+                            {{else}}
+                                <span class="badge bg-success">Normal</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            {{#if (eq estado 'Activa')}}
+                                <span class="badge bg-primary">Activa</span>
+                            {{else}}
+                                <span class="badge bg-secondary">Inactiva</span>
+                            {{/if}}
+                        </td>
+                        <td class="text-center">
+                            <a href="/piezas/detalle/{{id}}" class="btn btn-sm btn-info" title="Ver detalle">Detalle</a>
+                            <a href="/piezas/editar/{{id}}" class="btn btn-sm btn-warning" title="Editar">Editar</a>
+                            <form action="/piezas/eliminar/{{id}}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar esta pieza?');" title="Eliminar">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="alert alert-info shadow-sm" role="alert">
+    <h4 class="alert-heading">No se encontraron piezas</h4>
+    <p>No existen repuestos registrados que coincidan con los criterios de búsqueda, o el inventario está vacío. Haga clic en "Registrar nueva pieza" para comenzar.</p>
+</div>
+{{/if}}

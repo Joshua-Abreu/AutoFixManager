@@ -1,0 +1,64 @@
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Gestión de Marcas</h2>
+        <p class="text-muted">Administración de las marcas de vehículos del taller.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/marcas/crear" class="btn btn-primary">Registrar nueva marca</a>
+    </div>
+</div>
+
+{{#if error}}
+<div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+    <strong>¡Atención!</strong> {{error}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+
+{{#if marcas.length}}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>País de Origen</th>
+                        <th>Estado</th>
+                        <th class="text-center">Vehículos</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each marcas}}
+                    <tr>
+                        <td class="fw-bold">{{nombre}}</td>
+                        <td>{{#if paisOrigen}}{{paisOrigen}}{{else}}<span class="text-muted">No especificado</span>{{/if}}</td>
+                        <td>
+                            {{#if (eq estado 'Activa')}}
+                                <span class="badge bg-success">Activa</span>
+                            {{else}}
+                                <span class="badge bg-secondary">Inactiva</span>
+                            {{/if}}
+                        </td>
+                        <td class="text-center fw-bold">{{cantidadVehiculos}}</td>
+                        <td class="text-center">
+                            <a href="/marcas/detalle/{{id}}" class="btn btn-sm btn-info" title="Ver detalle">Detalle</a>
+                            <a href="/marcas/editar/{{id}}" class="btn btn-sm btn-warning" title="Editar">Editar</a>
+                            <form action="/marcas/eliminar/{{id}}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar esta marca?');" title="Eliminar">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="alert alert-info shadow-sm" role="alert">
+    <h4 class="alert-heading">No hay marcas disponibles</h4>
+    <p>Actualmente no existen marcas de vehículos registradas en el sistema. Haga clic en el botón "Registrar nueva marca" para comenzar.</p>
+</div>
+{{/if}}

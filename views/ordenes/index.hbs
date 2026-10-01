@@ -1,0 +1,64 @@
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Gestión de Órdenes de Trabajo</h2>
+        <p class="text-muted">Administración de reparaciones y mantenimientos.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/ordenes/crear" class="btn btn-primary">Registrar nueva orden</a>
+    </div>
+</div>
+
+{{#if ordenes.length}}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>N° Orden</th>
+                        <th>Placa Vehículo</th>
+                        <th>Recepción</th>
+                        <th>Entrega Est.</th>
+                        <th>Estado</th>
+                        <th>Total General</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each ordenes}}
+                    <tr>
+                        <td class="fw-bold">{{numeroOrden}}</td>
+                        <td class="text-uppercase">{{vehiculo.placa}}</td>
+                        <td>{{fechaRecepcion}}</td>
+                        <td>{{#if fechaEstimadaEntrega}}{{fechaEstimadaEntrega}}{{else}}<span class="text-muted">N/A</span>{{/if}}</td>
+                        <td>
+                            {{#if (eq estado 'Recibida')}}<span class="badge bg-primary">Recibida</span>{{/if}}
+                            {{#if (eq estado 'En diagnóstico')}}<span class="badge bg-info text-dark">En diagnóstico</span>{{/if}}
+                            {{#if (eq estado 'En reparación')}}<span class="badge bg-warning text-dark">En reparación</span>{{/if}}
+                            {{#if (eq estado 'Esperando piezas')}}<span class="badge bg-danger">Esperando piezas</span>{{/if}}
+                            {{#if (eq estado 'Lista para entrega')}}<span class="badge bg-success">Lista para entrega</span>{{/if}}
+                            {{#if (eq estado 'Entregada')}}<span class="badge bg-secondary">Entregada</span>{{/if}}
+                            {{#if (eq estado 'Cancelada')}}<span class="badge bg-dark">Cancelada</span>{{/if}}
+                        </td>
+                        <td class="fw-bold text-success">${{formatMoney totalGeneral}}</td>
+                        <td class="text-center">
+                            <a href="/ordenes/detalle/{{id}}" class="btn btn-sm btn-info text-white">Detalle</a>
+                            {{#if (eq estado 'Entregada')}}{{else}}
+                                {{#if (eq estado 'Cancelada')}}{{else}}
+                                    <a href="/ordenes/editar/{{id}}" class="btn btn-sm btn-warning">Editar</a>
+                                {{/if}}
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="alert alert-info shadow-sm" role="alert">
+    <h4 class="alert-heading">No hay órdenes registradas</h4>
+    <p>Actualmente no existen órdenes de trabajo en el sistema. Haga clic en el botón "Registrar nueva orden" para comenzar.</p>
+</div>
+{{/if}}

@@ -1,0 +1,303 @@
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Detalle de Orden: <span class="text-primary">{{orden.numeroOrden}}</span></h2>
+        <p class="text-muted">Estado actual: 
+            <span class="badge bg-secondary fs-6">{{orden.estado}}</span>
+        </p>
+    </div>
+    <div class="col-md-4 text-end">
+        {{#unless ordenCerrada}}
+            <a href="/ordenes/editar/{{orden.id}}" class="btn btn-warning">Editar Orden</a>
+        {{/unless}}
+        <a href="/ordenes" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+{{#if error}}
+<div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+    <strong>¡Atención!</strong> {{error}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+
+<div class="row">
+    <div class="col-md-8">
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Información General</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-2"><strong>Fecha de Recepción:</strong> {{orden.fechaRecepcion}}</div>
+                    <div class="col-md-6 mb-2"><strong>Fecha Estimada:</strong> {{#if orden.fechaEstimadaEntrega}}{{orden.fechaEstimadaEntrega}}{{else}}N/A{{/if}}</div>
+                    <div class="col-md-6 mb-2"><strong>Kilometraje Entrada:</strong> {{orden.kilometrajeEntrada}}</div>
+                    <div class="col-md-6 mb-2"><strong>Placa Vehículo:</strong> <span class="text-uppercase">{{orden.vehiculo.placa}}</span></div>
+                    <div class="col-md-6 mb-2"><strong>Marca y Modelo:</strong> {{orden.vehiculo.marca.nombre}} {{orden.vehiculo.modelo}} ({{orden.vehiculo.anio}})</div>
+                    <div class="col-md-6 mb-2"><strong>Propietario:</strong> {{orden.vehiculo.propietarioNombre}} ({{orden.vehiculo.propietarioTelefono}})</div>
+                </div>
+                <hr>
+                <p><strong>Descripción del Problema:</strong><br>{{orden.descripcionProblema}}</p>
+                {{#if orden.diagnosticoInicial}}
+                    <p><strong>Diagnóstico Inicial:</strong><br>{{orden.diagnosticoInicial}}</p>
+                {{/if}}
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4 border-primary">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Servicios Realizados</h5>
+                {{#unless ordenCerrada}}
+                    <button class="btn btn-sm btn-light text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#modalServicio">+ Agregar Servicio</button>
+                {{/unless}}
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Nota</th>
+                            <th class="text-end">Precio</th>
+                            {{#unless ordenCerrada}}<th class="text-center">Acciones</th>{{/unless}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each orden.servicios}}
+                        <tr>
+                            <td>{{this.servicioInfo.nombre}}</td>
+                            <td>{{this.nota}}</td>
+                            <td class="text-end">${{formatMoney this.precioAplicado}}</td>
+                            {{#unless ../ordenCerrada}}
+                            <td class="text-center">
+                                <form action="/ordenes/eliminar-servicio/{{this.id}}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                </form>
+                            </td>
+                            {{/unless}}
+                        </tr>
+                        {{else}}
+                        <tr><td colspan="4" class="text-center text-muted py-3">No hay servicios registrados.</td></tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4 border-success">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Piezas Utilizadas</h5>
+                {{#unless ordenCerrada}}
+                    <button class="btn btn-sm btn-light text-success fw-bold" data-bs-toggle="modal" data-bs-target="#modalPieza">+ Agregar Pieza</button>
+                {{/unless}}
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Pieza</th>
+                            <th class="text-center">Cant.</th>
+                            <th class="text-end">P. Unitario</th>
+                            <th class="text-end">Subtotal</th>
+                            {{#unless ordenCerrada}}<th class="text-center">Acciones</th>{{/unless}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each orden.piezas}}
+                        <tr>
+                            <td>{{this.piezaInfo.nombre}}</td>
+                            <td class="text-center">{{this.cantidad}}</td>
+                            <td class="text-end">${{formatMoney this.precioUnitarioAplicado}}</td>
+                            <td class="text-end fw-bold">${{formatMoney this.subtotal}}</td>
+                            {{#unless ../ordenCerrada}}
+                            <td class="text-center">
+                                <form action="/ordenes/eliminar-pieza/{{this.id}}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                </form>
+                            </td>
+                            {{/unless}}
+                        </tr>
+                        {{else}}
+                        <tr><td colspan="5" class="text-center text-muted py-3">No hay piezas registradas.</td></tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4 border-info">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Evidencias Fotográficas</h5>
+                {{#unless ordenCerrada}}
+                    <button class="btn btn-sm btn-light text-info fw-bold" data-bs-toggle="modal" data-bs-target="#modalEvidencia">+ Subir Foto</button>
+                {{/unless}}
+            </div>
+            <div class="card-body bg-light">
+                <div class="row">
+                    {{#each orden.evidencias}}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{this.imagen}}" class="card-img-top" alt="Evidencia" style="height: 150px; object-fit: cover;">
+                            <div class="card-body p-2 text-center">
+                                <p class="card-text small mb-1">{{#if this.descripcion}}{{this.descripcion}}{{else}}<span class="text-muted">Sin descripción</span>{{/if}}</p>
+                                <p class="card-text text-muted mb-2" style="font-size: 0.75rem;">Cargado: {{this.fechaCarga}}</p>
+                                
+                                {{#unless ../ordenCerrada}}
+                                <form action="/ordenes/eliminar-evidencia/{{this.id}}" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">Eliminar</button>
+                                </form>
+                                {{/unless}}
+                            </div>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="col-12 text-center text-muted py-3">No hay evidencias registradas.</div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4 border-dark">
+            <div class="card-header bg-dark text-white text-center">
+                <h5 class="mb-0">Resumen Financiero</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Subtotal Servicios:</span>
+                    <strong>${{formatMoney orden.subtotalServicios}}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Subtotal Piezas:</span>
+                    <strong>${{formatMoney orden.subtotalPiezas}}</strong>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal General:</span>
+                    <strong>${{formatMoney orden.subtotalGeneral}}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2 text-danger">
+                    <span>Descuento:</span>
+                    <strong>- ${{formatMoney orden.descuento}}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Base Imponible:</span>
+                    <span>${{formatMoney orden.baseImponible}}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Impuesto ({{orden.porcentajeImpuesto}}%):</span>
+                    <span>${{formatMoney orden.impuesto}}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded">
+                    <h5 class="mb-0">TOTAL:</h5>
+                    <h4 class="mb-0 text-success">${{formatMoney orden.totalGeneral}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalServicio" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/ordenes/agregar-servicio/{{orden.id}}" method="POST">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">Agregar Servicio</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+                <label class="form-label">Seleccionar Servicio</label>
+                <select class="form-select" name="servicioId" required>
+                    <option value="" disabled selected>Elija un servicio...</option>
+                    {{#each servicios}}
+                        <option value="{{this.id}}">{{this.nombre}} - ${{this.precioBase}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Precio a Aplicar (Puede modificarlo)</label>
+                <input type="number" step="0.01" class="form-control" name="precioAplicado" required min="0.01">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nota (Opcional)</label>
+                <input type="text" class="form-control" name="nota">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Servicio</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalPieza" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/ordenes/agregar-pieza/{{orden.id}}" method="POST">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">Agregar Pieza</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+                <label class="form-label">Seleccionar Pieza (En stock)</label>
+                <select class="form-select" name="piezaId" required>
+                    <option value="" disabled selected>Elija una pieza...</option>
+                    {{#each piezas}}
+                        <option value="{{this.id}}">{{this.nombre}} (Stock: {{this.stockActual}}) - ${{this.precioVenta}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" class="form-control" name="cantidad" required min="1">
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Precio Unitario</label>
+                    <input type="number" step="0.01" class="form-control" name="precioUnitarioAplicado" required min="0.01">
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Guardar Pieza</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEvidencia" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/ordenes/agregar-evidencia/{{orden.id}}" method="POST" enctype="multipart/form-data">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title">Subir Evidencia</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-warning py-2 mb-3">
+                <small><strong>Nota:</strong> Solo imágenes (.jpg, .jpeg, .png, .webp). Máx. 2MB.</small>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Seleccionar Imagen <span class="text-danger">*</span></label>
+                <input class="form-control" type="file" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripción (Opcional)</label>
+                <input type="text" class="form-control" name="descripcion" placeholder="Ej: Daño en el parachoques frontal">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-info text-white">Guardar Evidencia</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Detalle del Servicio</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 30%;" class="bg-light">Nombre:</th>
+                            <td class="fw-bold">{{servicio.nombre}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Descripción:</th>
+                            <td>{{#if servicio.descripcion}}{{servicio.descripcion}}{{else}}<span class="text-muted">Sin descripción</span>{{/if}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Categoría:</th>
+                            <td>{{servicio.categoria}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Precio Base:</th>
+                            <td>RD$ {{formatMoney servicio.precioBase}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Duración Estimada:</th>
+                            <td>{{#if servicio.duracionEstimada}}{{servicio.duracionEstimada}} minutos{{else}}<span class="text-muted">No especificada</span>{{/if}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Estado:</th>
+                            <td>
+                                {{#if (eq servicio.estado 'Activo')}}
+                                    <span class="badge bg-success">Activo</span>
+                                {{else}}
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                {{/if}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-end mt-4">
+                    <a href="/servicios" class="btn btn-secondary">Volver al listado</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

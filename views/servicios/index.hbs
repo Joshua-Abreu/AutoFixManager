@@ -1,0 +1,68 @@
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Gestión de Servicios</h2>
+        <p class="text-muted">Administración de los servicios ofrecidos por el taller.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/servicios/crear" class="btn btn-primary">Registrar nuevo servicio</a>
+    </div>
+</div>
+
+{{#if servicios.length}}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th class="text-end">Precio Base</th>
+                        <th class="text-center">Duración (min)</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each servicios}}
+                    <tr>
+                        <td class="fw-bold">{{nombre}}</td>
+                        <td>{{categoria}}</td>
+                        
+                        <td class="text-end">RD$ {{formatMoney precioBase}}</td>
+                        
+                        <td class="text-center">
+                            {{#if duracionEstimada}}
+                                {{duracionEstimada}}
+                            {{else}}
+                                <span class="text-muted">N/A</span>
+                            {{/if}}
+                        </td>
+                        
+                        <td>
+                            {{#if (eq estado 'Activo')}}
+                                <span class="badge bg-success">Activo</span>
+                            {{else}}
+                                <span class="badge bg-secondary">Inactivo</span>
+                            {{/if}}
+                        </td>
+                        <td class="text-center">
+                            <a href="/servicios/detalle/{{id}}" class="btn btn-sm btn-info" title="Ver detalle">Detalle</a>
+                            <a href="/servicios/editar/{{id}}" class="btn btn-sm btn-warning" title="Editar">Editar</a>
+                            <form action="/servicios/eliminar/{{id}}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar este servicio?');" title="Eliminar">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="alert alert-info shadow-sm" role="alert">
+    <h4 class="alert-heading">No hay servicios registrados</h4>
+    <p>Actualmente no existen servicios disponibles en el sistema. Haga clic en el botón "Registrar nuevo servicio" para comenzar.</p>
+</div>
+{{/if}}

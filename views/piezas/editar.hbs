@@ -1,0 +1,90 @@
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Editar Pieza o Repuesto</h4>
+            </div>
+            <div class="card-body">
+                {{#if error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/piezas/editar/{{pieza.id}}" method="POST" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="codigo" class="form-label">Código Interno <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="codigo" name="codigo" value="{{pieza.codigo}}" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="nombre" class="form-label">Nombre de la pieza <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="{{pieza.nombre}}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="2">{{pieza.descripcion}}</textarea>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="categoria" class="form-label">Categoría <span class="text-danger">*</span></label>
+                            <select class="form-select" id="categoria" name="categoria" required>
+                                <option value="Motor" {{#if (eq pieza.categoria 'Motor')}}selected{{/if}}>Motor</option>
+                                <option value="Frenos" {{#if (eq pieza.categoria 'Frenos')}}selected{{/if}}>Frenos</option>
+                                <option value="Suspensión" {{#if (eq pieza.categoria 'Suspensión')}}selected{{/if}}>Suspensión</option>
+                                <option value="Transmisión" {{#if (eq pieza.categoria 'Transmisión')}}selected{{/if}}>Transmisión</option>
+                                <option value="Electricidad" {{#if (eq pieza.categoria 'Electricidad')}}selected{{/if}}>Electricidad</option>
+                                <option value="Filtros" {{#if (eq pieza.categoria 'Filtros')}}selected{{/if}}>Filtros</option>
+                                <option value="Aceites y fluidos" {{#if (eq pieza.categoria 'Aceites y fluidos')}}selected{{/if}}>Aceites y fluidos</option>
+                                <option value="Neumáticos" {{#if (eq pieza.categoria 'Neumáticos')}}selected{{/if}}>Neumáticos</option>
+                                <option value="Accesorios" {{#if (eq pieza.categoria 'Accesorios')}}selected{{/if}}>Accesorios</option>
+                                <option value="Otro" {{#if (eq pieza.categoria 'Otro')}}selected{{/if}}>Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="stockActual" class="form-label">Stock Actual <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="stockActual" name="stockActual" value="{{pieza.stockActual}}" required min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="stockMinimo" class="form-label">Stock Mínimo <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="stockMinimo" name="stockMinimo" value="{{pieza.stockMinimo}}" required min="0">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label for="costoUnitario" class="form-label">Costo Unitario (RD$) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" class="form-control" id="costoUnitario" name="costoUnitario" value="{{pieza.costoUnitario}}" required min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="precioVenta" class="form-label">Precio Venta (RD$) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" class="form-control" id="precioVenta" name="precioVenta" value="{{pieza.precioVenta}}" required min="0.01">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="estado" class="form-label">Estado <span class="text-danger">*</span></label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="Activa" {{#if (eq pieza.estado 'Activa')}}selected{{/if}}>Activa</option>
+                                <option value="Inactiva" {{#if (eq pieza.estado 'Inactiva')}}selected{{/if}}>Inactiva</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="imagen" class="form-label">Cambiar Imagen</label>
+                            <input class="form-control" type="file" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+                            {{#if pieza.imagen}}
+                                <small class="text-muted mt-1 d-block">Ya existe una imagen cargada. Suba una nueva solo si desea reemplazarla.</small>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/piezas" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-warning">Actualizar Pieza</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

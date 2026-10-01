@@ -1,0 +1,69 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Editar Servicio</h4>
+            </div>
+            <div class="card-body">
+                {{#if error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/servicios/editar/{{servicio.id}}" method="POST">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre del Servicio <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{servicio.nombre}}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="2">{{servicio.descripcion}}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="categoria" class="form-label">Categoría <span class="text-danger">*</span></label>
+                            <select class="form-select" id="categoria" name="categoria" required>
+                                <option value="Diagnóstico" {{#if (eq servicio.categoria 'Diagnóstico')}}selected{{/if}}>Diagnóstico</option>
+                                <option value="Mantenimiento" {{#if (eq servicio.categoria 'Mantenimiento')}}selected{{/if}}>Mantenimiento</option>
+                                <option value="Reparación" {{#if (eq servicio.categoria 'Reparación')}}selected{{/if}}>Reparación</option>
+                                <option value="Electricidad" {{#if (eq servicio.categoria 'Electricidad')}}selected{{/if}}>Electricidad</option>
+                                <option value="Frenos" {{#if (eq servicio.categoria 'Frenos')}}selected{{/if}}>Frenos</option>
+                                <option value="Motor" {{#if (eq servicio.categoria 'Motor')}}selected{{/if}}>Motor</option>
+                                <option value="Transmisión" {{#if (eq servicio.categoria 'Transmisión')}}selected{{/if}}>Transmisión</option>
+                                <option value="Suspensión" {{#if (eq servicio.categoria 'Suspensión')}}selected{{/if}}>Suspensión</option>
+                                <option value="Aire acondicionado" {{#if (eq servicio.categoria 'Aire acondicionado')}}selected{{/if}}>Aire acondicionado</option>
+                                <option value="Otro" {{#if (eq servicio.categoria 'Otro')}}selected{{/if}}>Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="precioBase" class="form-label">Precio Base (RD$) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" class="form-control" id="precioBase" name="precioBase" value="{{servicio.precioBase}}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="duracionEstimada" class="form-label">Duración Estimada (minutos)</label>
+                            <input type="number" class="form-control" id="duracionEstimada" name="duracionEstimada" value="{{servicio.duracionEstimada}}">
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="estado" class="form-label">Estado <span class="text-danger">*</span></label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="Activo" {{#if (eq servicio.estado 'Activo')}}selected{{/if}}>Activo</option>
+                                <option value="Inactivo" {{#if (eq servicio.estado 'Inactivo')}}selected{{/if}}>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/servicios" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-warning">Actualizar Servicio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

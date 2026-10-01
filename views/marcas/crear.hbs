@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Registrar Nueva Marca</h4>
+            </div>
+            <div class="card-body">
+                {{#if error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/marcas/crear" method="POST">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre de la Marca <span class="text-danger"></span></label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{marca.nombre}}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="paisOrigen" class="form-label">País de Origen</label>
+                        <input type="text" class="form-control" id="paisOrigen" name="paisOrigen" value="{{marca.paisOrigen}}">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="estado" class="form-label">Estado <span class="text-danger"></span></label>
+                        <select class="form-select" id="estado" name="estado" required>
+                            <option value="Activa" {{#if (eq marca.estado 'Activa')}}selected{{/if}}>Activa</option>
+                            <option value="Inactiva" {{#if (eq marca.estado 'Inactiva')}}selected{{/if}}>Inactiva</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/marcas" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar Marca</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

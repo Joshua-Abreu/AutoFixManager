@@ -1,0 +1,151 @@
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold text-dark">AutoFix Manager</h2>
+        <p class="text-muted">Resumen general del estado actual del taller mecánico.</p>
+    </div>
+</div>
+
+{{#if errorGeneral}}
+<div class="alert alert-danger shadow-sm" role="alert">
+    <strong>Error:</strong> {{errorGeneral}}
+</div>
+{{else}}
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-primary h-100">
+            <div class="card-body text-center">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Total Vehículos</h6>
+                <h2 class="text-primary mb-0 fw-bold">{{resumen.totalVehiculos}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-info h-100">
+            <div class="card-body text-center">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Total Órdenes</h6>
+                <h2 class="text-info mb-0 fw-bold">{{resumen.totalOrdenes}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-warning h-100">
+            <div class="card-body text-center">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Órdenes Activas</h6>
+                <h2 class="text-warning mb-0 fw-bold">{{resumen.ordenesActivas}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-danger h-100">
+            <div class="card-body text-center">
+                <h6 class="text-muted text-uppercase fw-bold mb-2 text-truncate" title="Piezas bajo inventario">Inventario Bajo</h6>
+                <h2 class="text-danger mb-0 fw-bold">{{resumen.piezasBajoInventario}}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-success h-100">
+            <div class="card-body text-center">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Órdenes Entregadas</h6>
+                <h2 class="text-success mb-0 fw-bold">{{resumen.ordenesFinalizadas}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-secondary h-100">
+            <div class="card-body text-center">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Órdenes Canceladas</h6>
+                <h2 class="text-secondary mb-0 fw-bold">{{resumen.ordenesCanceladas}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-dark h-100 bg-dark text-white">
+            <div class="card-body text-center">
+                <h6 class="text-uppercase fw-bold mb-2 text-light">Total Facturado</h6>
+                <h2 class="mb-0 fw-bold text-success">${{resumen.totalFacturado}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-9 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white pb-0 border-bottom-0 mt-2">
+                <h5 class="fw-bold text-dark">Últimas Órdenes Registradas</h5>
+            </div>
+            <div class="card-body">
+                {{#if ultimasOrdenes.length}}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>N° Orden</th>
+                                <th>Vehículo</th>
+                                <th>Placa</th>
+                                <th>Recepción</th>
+                                <th>Estado</th>
+                                <th class="text-end">Total</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each ultimasOrdenes}}
+                            <tr>
+                                <td class="fw-bold">{{this.numeroOrden}}</td>
+                                <td>{{this.vehiculo.marca.nombre}} {{this.vehiculo.modelo}}</td>
+                                <td class="text-uppercase">{{this.vehiculo.placa}}</td>
+                                <td>{{this.fechaRecepcion}}</td>
+                                <td>
+                                    {{#if (eq this.estado 'Recibida')}}<span class="badge bg-primary">Recibida</span>{{/if}}
+                                    {{#if (eq this.estado 'En diagnóstico')}}<span class="badge bg-info text-dark">En diagnóstico</span>{{/if}}
+                                    {{#if (eq this.estado 'En reparación')}}<span class="badge bg-warning text-dark">En reparación</span>{{/if}}
+                                    {{#if (eq this.estado 'Esperando piezas')}}<span class="badge bg-danger">Esperando piezas</span>{{/if}}
+                                    {{#if (eq this.estado 'Lista para entrega')}}<span class="badge bg-success">Lista para entrega</span>{{/if}}
+                                    {{#if (eq this.estado 'Entregada')}}<span class="badge bg-secondary">Entregada</span>{{/if}}
+                                    {{#if (eq this.estado 'Cancelada')}}<span class="badge bg-dark">Cancelada</span>{{/if}}
+                                </td>
+                                <td class="text-end fw-bold text-success">${{this.totalGeneral}}</td>
+                                <td class="text-center">
+                                    <a href="/ordenes/detalle/{{this.id}}" class="btn btn-sm btn-info text-white">Detalle</a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                {{else}}
+                <div class="alert alert-info" role="alert">
+                    No hay órdenes de trabajo registradas en el sistema.
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-4">
+        <div class="card shadow-sm h-100 bg-light border-0">
+            <div class="card-body">
+                <h5 class="fw-bold text-dark mb-4 mt-2">Accesos Rápidos</h5>
+                <div class="d-grid gap-3">
+                    <a href="/ordenes/crear" class="btn btn-primary btn-lg shadow-sm text-start">
+                        <i class="bi bi-file-earmark-plus"></i> Crear Orden
+                    </a>
+                    <a href="/vehiculos/crear" class="btn btn-outline-dark btn-lg shadow-sm text-start bg-white">
+                        <i class="bi bi-car-front"></i> Registrar Vehículo
+                    </a>
+                    <a href="/piezas/crear" class="btn btn-outline-dark btn-lg shadow-sm text-start bg-white">
+                        <i class="bi bi-tools"></i> Registrar Pieza
+                    </a>
+                    <a href="/servicios/crear" class="btn btn-outline-dark btn-lg shadow-sm text-start bg-white">
+                        <i class="bi bi-wrench-adjustable"></i> Registrar Servicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}

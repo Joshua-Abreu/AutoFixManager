@@ -1,0 +1,104 @@
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Editar Vehículo</h4>
+            </div>
+            <div class="card-body">
+                {{#if error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/vehiculos/editar/{{vehiculo.id}}" method="POST" enctype="multipart/form-data">
+                    <h5 class="text-primary border-bottom pb-2 mb-3">Datos del Vehículo</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="placa" class="form-label">Placa <span class="text-danger"></span></label>
+                            <input type="text" class="form-control text-uppercase" id="placa" name="placa" value="{{vehiculo.placa}}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="marcaId" class="form-label">Marca <span class="text-danger"></span></label>
+                            <select class="form-select" id="marcaId" name="marcaId" required>
+                                {{#each marcas}}
+                                    <option value="{{this.id}}" {{#if (eq ../vehiculo.marcaId (toString this.id))}}selected{{/if}}>{{this.nombre}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="modelo" class="form-label">Modelo <span class="text-danger"></span></label>
+                            <input type="text" class="form-control" id="modelo" name="modelo" value="{{vehiculo.modelo}}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="anio" class="form-label">Año <span class="text-danger"></span></label>
+                            <input type="number" class="form-control" id="anio" name="anio" value="{{vehiculo.anio}}" required min="1980">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label for="color" class="form-label">Color <span class="text-danger"></span></label>
+                            <input type="text" class="form-control" id="color" name="color" value="{{vehiculo.color}}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tipoVehiculo" class="form-label">Tipo de Vehículo <span class="text-danger"></span></label>
+                            <select class="form-select" id="tipoVehiculo" name="tipoVehiculo" required>
+                                <option value="Carro" {{#if (eq vehiculo.tipoVehiculo 'Carro')}}selected{{/if}}>Carro</option>
+                                <option value="Jeepeta" {{#if (eq vehiculo.tipoVehiculo 'Jeepeta')}}selected{{/if}}>Jeepeta</option>
+                                <option value="Camioneta" {{#if (eq vehiculo.tipoVehiculo 'Camioneta')}}selected{{/if}}>Camioneta</option>
+                                <option value="Camión" {{#if (eq vehiculo.tipoVehiculo 'Camión')}}selected{{/if}}>Camión</option>
+                                <option value="Motocicleta" {{#if (eq vehiculo.tipoVehiculo 'Motocicleta')}}selected{{/if}}>Motocicleta</option>
+                                <option value="Otro" {{#if (eq vehiculo.tipoVehiculo 'Otro')}}selected{{/if}}>Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="kilometraje" class="form-label">Kilometraje <span class="text-danger"></span></label>
+                            <input type="number" step="0.01" class="form-control" id="kilometraje" name="kilometraje" value="{{vehiculo.kilometraje}}" required min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="estado" class="form-label">Estado <span class="text-danger"></span></label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="Registrado" {{#if (eq vehiculo.estado 'Registrado')}}selected{{/if}}>Registrado</option>
+                                <option value="En taller" {{#if (eq vehiculo.estado 'En taller')}}selected{{/if}}>En taller</option>
+                                <option value="Fuera del taller" {{#if (eq vehiculo.estado 'Fuera del taller')}}selected{{/if}}>Fuera del taller</option>
+                                <option value="Inactivo" {{#if (eq vehiculo.estado 'Inactivo')}}selected{{/if}}>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h5 class="text-primary border-bottom pb-2 mb-3">Datos del Propietario</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label for="propietarioNombre" class="form-label">Nombre <span class="text-danger"></span></label>
+                            <input type="text" class="form-control" id="propietarioNombre" name="propietarioNombre" value="{{vehiculo.propietarioNombre}}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="propietarioTelefono" class="form-label">Teléfono <span class="text-danger"></span></label>
+                            <input type="text" class="form-control" id="propietarioTelefono" name="propietarioTelefono" value="{{vehiculo.propietarioTelefono}}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="propietarioCorreo" class="form-label">Correo Electrónico (Opcional)</label>
+                            <input type="email" class="form-control" id="propietarioCorreo" name="propietarioCorreo" value="{{vehiculo.propietarioCorreo}}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="imagen" class="form-label">Cambiar Imagen del Vehículo</label>
+                            <input class="form-control" type="file" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+                            {{#if vehiculo.imagen}}
+                                <small class="text-muted mt-1 d-block">Ya existe una imagen cargada. Suba una nueva solo si desea reemplazarla.</small>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/vehiculos" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-warning">Actualizar Vehículo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Editar Orden de Trabajo</h4>
+            </div>
+            <div class="card-body">
+                {{#if error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/ordenes/editar/{{orden.id}}" method="POST">
+                    <h5 class="text-primary border-bottom pb-2 mb-3">Datos Generales</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="numeroOrden" class="form-label">Número de Orden <span class="text-danger"></span></label>
+                            <input type="text" class="form-control text-uppercase" id="numeroOrden" name="numeroOrden" value="{{orden.numeroOrden}}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="vehiculoId" class="form-label">Vehículo <span class="text-danger"></span></label>
+                            <select class="form-select" name="vehiculoId" required>
+                                {{#each vehiculos}}
+                                    <option value="{{this.id}}" {{#if (eq this.id ../orden.vehiculoId)}}selected{{/if}}>
+                                        {{this.placa}} - {{this.marca.nombre}} {{this.modelo}}
+                                    </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="estado" class="form-label">Estado de la Orden <span class="text-danger"></span></label>
+                            <select class="form-select fw-bold" id="estado" name="estado" required>
+                                <option value="Recibida" {{#if (eq orden.estado 'Recibida')}}selected{{/if}}>Recibida</option>
+                                <option value="En diagnóstico" {{#if (eq orden.estado 'En diagnóstico')}}selected{{/if}}>En diagnóstico</option>
+                                <option value="En reparación" {{#if (eq orden.estado 'En reparación')}}selected{{/if}}>En reparación</option>
+                                <option value="Esperando piezas" {{#if (eq orden.estado 'Esperando piezas')}}selected{{/if}}>Esperando piezas</option>
+                                <option value="Lista para entrega" {{#if (eq orden.estado 'Lista para entrega')}}selected{{/if}}>Lista para entrega</option>
+                                <option value="Entregada" {{#if (eq orden.estado 'Entregada')}}selected{{/if}}>Entregada</option>
+                                <option value="Cancelada" {{#if (eq orden.estado 'Cancelada')}}selected{{/if}}>Cancelada</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="fechaRecepcion" class="form-label">Fecha Recepción <span class="text-danger"></span></label>
+                            <input type="date" class="form-control" id="fechaRecepcion" name="fechaRecepcion" value="{{orden.fechaRecepcion}}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechaEstimadaEntrega" class="form-label">Fecha Est. Entrega</label>
+                            <input type="date" class="form-control" id="fechaEstimadaEntrega" name="fechaEstimadaEntrega" value="{{orden.fechaEstimadaEntrega}}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="kilometrajeEntrada" class="form-label">Kilometraje de Entrada <span class="text-danger"></span></label>
+                            <input type="number" step="0.01" class="form-control" id="kilometrajeEntrada" name="kilometrajeEntrada" value="{{orden.kilometrajeEntrada}}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="descripcionProblema" class="form-label">Descripción del Problema <span class="text-danger"></span></label>
+                            <textarea class="form-control" id="descripcionProblema" name="descripcionProblema" rows="2" required>{{orden.descripcionProblema}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="diagnosticoInicial" class="form-label">Diagnóstico Inicial</label>
+                            <textarea class="form-control" id="diagnosticoInicial" name="diagnosticoInicial" rows="2">{{orden.diagnosticoInicial}}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="observaciones" name="observaciones" rows="2">{{orden.observaciones}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/ordenes" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-warning">Actualizar Orden</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

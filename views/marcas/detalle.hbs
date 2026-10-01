@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Detalle de la Marca</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 30%;" class="bg-light">Nombre:</th>
+                            <td class="fw-bold">{{marca.nombre}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">País de Origen:</th>
+                            <td>{{#if marca.paisOrigen}}{{marca.paisOrigen}}{{else}}<span class="text-muted">No especificado</span>{{/if}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Estado:</th>
+                            <td>
+                                {{#if (eq marca.estado 'Activa')}}
+                                    <span class="badge bg-success">Activa</span>
+                                {{else}}
+                                    <span class="badge bg-secondary">Inactiva</span>
+                                {{/if}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Cantidad de Vehículos:</th>
+                            <td>{{cantidadVehiculos}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-end mt-4">
+                    <a href="/marcas" class="btn btn-secondary me-2">Volver al listado</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<div class="row justify-content-center mt-4">
+    <div class="col-md-11">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Detalle del Vehículo</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 class="text-primary border-bottom pb-2 mb-3">Información del Vehículo</h5>
+                        <table class="table table-bordered mb-4">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 30%;" class="bg-light">Placa:</th>
+                                    <td class="fw-bold fs-5 text-uppercase">{{vehiculo.placa}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Marca:</th>
+                                    <td>{{vehiculo.marca.nombre}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Modelo y Año:</th>
+                                    <td>{{vehiculo.modelo}} - {{vehiculo.anio}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Color:</th>
+                                    <td>{{vehiculo.color}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Tipo de Vehículo:</th>
+                                    <td>{{vehiculo.tipoVehiculo}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Kilometraje:</th>
+                                    <td>{{vehiculo.kilometraje}} km</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Estado en Taller:</th>
+                                    <td>
+                                        {{#if (eq vehiculo.estado 'Registrado')}}<span class="badge bg-primary">Registrado</span>{{/if}}
+                                        {{#if (eq vehiculo.estado 'En taller')}}<span class="badge bg-warning text-dark">En taller</span>{{/if}}
+                                        {{#if (eq vehiculo.estado 'Fuera del taller')}}<span class="badge bg-success">Fuera del taller</span>{{/if}}
+                                        {{#if (eq vehiculo.estado 'Inactivo')}}<span class="badge bg-secondary">Inactivo</span>{{/if}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Órdenes Asociadas:</th>
+                                    <td class="fw-bold">{{vehiculo.cantidadOrdenes}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5 class="text-primary border-bottom pb-2 mb-3">Información del Propietario</h5>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 30%;" class="bg-light">Nombre:</th>
+                                    <td>{{vehiculo.propietarioNombre}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Teléfono:</th>
+                                    <td>{{vehiculo.propietarioTelefono}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Correo Electrónico:</th>
+                                    <td>{{#if vehiculo.propietarioCorreo}}{{vehiculo.propietarioCorreo}}{{else}}<span class="text-muted">No registrado</span>{{/if}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="col-md-4 text-center">
+                        <h6 class="text-muted mb-3">Fotografía del Vehículo</h6>
+                        {{#if vehiculo.imagen}}
+                            <img src="{{vehiculo.imagen}}" alt="Imagen del Vehículo {{vehiculo.placa}}" class="img-fluid img-thumbnail rounded shadow-sm" style="max-height: 300px; object-fit: cover;">
+                        {{else}}
+                            <div class="bg-light border rounded d-flex align-items-center justify-content-center p-4 text-muted" style="height: 300px;">
+                                <div class="text-center">
+                                    <i class="fs-1">🚗</i>
+                                    <p class="mt-2 mb-0">No se ha cargado ninguna imagen.</p>
+                                </div>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <a href="/vehiculos" class="btn btn-secondary">Volver al listado</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
